@@ -1,0 +1,52 @@
+[tool.poetry]
+name = "notebooks"
+version = "0.1.0"
+description = "Lecture notes with explainability examples in Python."
+authors = ["Mauro J. Sanchirico III <156733573+mauro-j-sanchirico@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+numpy = "^2.1.1"
+matplotlib = "^3.9.2"
+notebook = "^7.2.2"
+ipython = "^8.27.0"
+ipympl = "^0.9.4"
+scipy = "^1.14.1"
+latex = "^0.7.0"
+scikit-learn = "^1.5.2"
+lime = "^0.2.0.1"
+torch = "^2.5.1"
+torchvision = "^0.20.1"
+ipykernel = "^6.29.5"
+pandas = "^2.2.3"
+seaborn = "^0.13.2"
+panel = "^1.5.4"
+hvplot = "^0.11.1"
+holoviews = "^1.20.0"
+openpyxl = "^3.1.5"
+jupyter-bokeh = "^4.0.5"
+bokeh = "^3.6.1"
+geopandas = "^1.0.1"
+folium = "^0.18.0"
+plotly = "^5.24.1"
+ipywidgets = "^8.1.5"
+dash = "^2.18.2"
+dash-bootstrap-components = "^1.6.0"
+jupyter-dash = "^0.4.2"
+pylint = "^3.3.2"
+sphinx = ">=4.0,<6.0"
+nbsphinx = ">=0.8.0,<1.0"
+sphinx-autodoc-typehints = ">=1.12,<1.19"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.8.0"
+mypy = "^1.11.2"
+mypy-extensions = "^1.0.0"
+isort = "^5.13.2"
+flake8 = "^7.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

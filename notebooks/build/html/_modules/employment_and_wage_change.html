@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>employment_and_wage_change &#8212; Skill-Based Career Prediction and Market Insights Using Machine Learning and Hollands Code 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for employment_and_wage_change</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">employment_and_wage_change: Top 5 Employment and Wage Changes Across Industries</span>
+
+<span class="sd">This module contains functions to display top 10 employee count and wage change across industries.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">dash</span>
+<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
+<span class="kn">from</span> <span class="nn">dash.dependencies</span> <span class="kn">import</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">data_preprocessing</span> <span class="kn">import</span> <span class="n">process_wage_and_employment_data</span>
+
+<span class="n">common_df</span> <span class="o">=</span> <span class="n">process_wage_and_employment_data</span><span class="p">()</span>
+
+<span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;annual_2019&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;annual_2019&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+<span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;annual_2023&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;annual_2023&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+
+<span class="n">common_df</span> <span class="o">=</span> <span class="n">common_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;annual_2019&#39;</span><span class="p">,</span> <span class="s1">&#39;annual_2023&#39;</span><span class="p">])</span>
+
+<span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;wage_percent_change&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="nb">abs</span><span class="p">(</span><span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;annual_2023&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;annual_2019&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;annual_2019&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span>
+<span class="p">)</span>
+
+<span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;percent_change&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="nb">abs</span><span class="p">(</span><span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;annual_2023&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;annual_2019&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;annual_2019&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span>
+<span class="p">)</span>
+
+<span class="n">employment_and_wage_change</span> <span class="o">=</span> <span class="n">dash</span><span class="o">.</span><span class="n">Dash</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">employment_and_wage_change</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">([</span>
+    <span class="n">html</span><span class="o">.</span><span class="n">H1</span><span class="p">(</span><span class="s2">&quot;Employment and Wage Change Dashboard&quot;</span><span class="p">),</span>
+    <span class="n">dcc</span><span class="o">.</span><span class="n">Tabs</span><span class="p">([</span>
+        <span class="n">dcc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total Employment Change&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">([</span>
+                <span class="n">dcc</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
+                    <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;department-dropdown-emp&#39;</span><span class="p">,</span>
+                    <span class="n">options</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="n">dept</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">dept</span><span class="p">}</span>
+                             <span class="k">for</span> <span class="n">dept</span> <span class="ow">in</span> <span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;department_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()],</span>
+                    <span class="n">value</span><span class="o">=</span><span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;department_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">clearable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;50%&#39;</span><span class="p">,</span> <span class="s1">&#39;margin&#39;</span><span class="p">:</span> <span class="s1">&#39;auto&#39;</span><span class="p">}</span>
+                <span class="p">),</span>
+                <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;top5-jobs-container-emp&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;flex&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;justify-content&#39;</span><span class="p">:</span> <span class="s1">&#39;space-between&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;90%&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;margin&#39;</span><span class="p">:</span> <span class="s1">&#39;auto&#39;</span>
+                <span class="p">})</span>
+            <span class="p">])</span>
+        <span class="p">]),</span>
+        <span class="n">dcc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Wage Change&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">([</span>
+                <span class="n">dcc</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
+                    <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;department-dropdown-wage&#39;</span><span class="p">,</span>
+                    <span class="n">options</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="n">dept</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">dept</span><span class="p">}</span>
+                             <span class="k">for</span> <span class="n">dept</span> <span class="ow">in</span> <span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;department_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()],</span>
+                    <span class="n">value</span><span class="o">=</span><span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;department_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">clearable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;50%&#39;</span><span class="p">,</span> <span class="s1">&#39;margin&#39;</span><span class="p">:</span> <span class="s1">&#39;auto&#39;</span><span class="p">}</span>
+                <span class="p">),</span>
+                <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;top5-jobs-container-wage&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;flex&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;justify-content&#39;</span><span class="p">:</span> <span class="s1">&#39;space-between&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;90%&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;margin&#39;</span><span class="p">:</span> <span class="s1">&#39;auto&#39;</span>
+                <span class="p">})</span>
+            <span class="p">])</span>
+        <span class="p">])</span>
+    <span class="p">])</span>
+<span class="p">])</span>
+
+<div class="viewcode-block" id="update_employment_dashboard"><a class="viewcode-back" href="../modules.html#employment_and_wage_change.update_employment_dashboard">[docs]</a><span class="nd">@employment_and_wage_change</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span>
+    <span class="n">Output</span><span class="p">(</span><span class="s1">&#39;top5-jobs-container-emp&#39;</span><span class="p">,</span> <span class="s1">&#39;children&#39;</span><span class="p">),</span>
+    <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s1">&#39;department-dropdown-emp&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)]</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">update_employment_dashboard</span><span class="p">(</span><span class="n">selected_department</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the employment change dashboard for the selected department.</span>
+
+<span class="sd">    This function filters the data based on the selected department </span>
+<span class="sd">    and calculates the top 5 job titles with the highest and lowest </span>
+<span class="sd">    employment percentage changes.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        selected_department (str): The department name selected from the dropdown.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: A list of two `dcc.Graph` components displaying the top 5 </span>
+<span class="sd">        jobs with the highest and lowest employment changes as bar charts.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filtered_df</span> <span class="o">=</span> <span class="n">common_df</span><span class="p">[</span><span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;department_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">selected_department</span><span class="p">]</span>
+
+    <span class="n">filtered_df_unique</span> <span class="o">=</span> <span class="n">filtered_df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s1">&#39;occ_title&#39;</span><span class="p">)</span>
+
+    <span class="n">top5_increase</span> <span class="o">=</span> <span class="n">filtered_df_unique</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;percent_change&#39;</span><span class="p">)</span>
+    <span class="n">top5_decrease</span> <span class="o">=</span> <span class="n">filtered_df_unique</span><span class="o">.</span><span class="n">nsmallest</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;percent_change&#39;</span><span class="p">)</span>
+
+    <span class="n">fig_increase</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+        <span class="n">top5_increase</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="s1">&#39;occ_title&#39;</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;percent_change&#39;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Top 5 Jobs with Highest Employment Increase&#39;</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;percent_change&#39;</span><span class="p">:</span> <span class="s1">&#39;% Increase&#39;</span><span class="p">},</span>
+        <span class="n">color_discrete_sequence</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;green&#39;</span><span class="p">],</span>
+        <span class="n">text</span><span class="o">=</span><span class="s1">&#39;percent_change&#39;</span>  <span class="c1"># Adding text to the bars to show the actual value</span>
+    <span class="p">)</span>
+    <span class="n">fig_increase</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">xaxis_tickangle</span><span class="o">=-</span><span class="mi">45</span><span class="p">,</span>
+                                <span class="n">margin</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">150</span><span class="p">})</span>
+    <span class="n">fig_increase</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">texttemplate</span><span class="o">=</span><span class="s1">&#39;%</span><span class="si">{text:.2f}</span><span class="s1">%&#39;</span><span class="p">,</span> <span class="n">textposition</span><span class="o">=</span><span class="s1">&#39;outside&#39;</span><span class="p">)</span>
+
+    <span class="n">fig_decrease</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+        <span class="n">top5_decrease</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="s1">&#39;occ_title&#39;</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;percent_change&#39;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Top 5 Jobs with Highest Employment Decrease&#39;</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;percent_change&#39;</span><span class="p">:</span> <span class="s1">&#39;% Decrease&#39;</span><span class="p">},</span>
+        <span class="n">color_discrete_sequence</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">],</span>
+        <span class="n">text</span><span class="o">=</span><span class="s1">&#39;percent_change&#39;</span>  <span class="c1"># Adding text to the bars to show the actual value</span>
+    <span class="p">)</span>
+    <span class="n">fig_decrease</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">xaxis_tickangle</span><span class="o">=-</span><span class="mi">45</span><span class="p">,</span>
+                                <span class="n">margin</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">150</span><span class="p">})</span>
+    <span class="n">fig_decrease</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">texttemplate</span><span class="o">=</span><span class="s1">&#39;%</span><span class="si">{text:.2f}</span><span class="s1">%&#39;</span><span class="p">,</span> <span class="n">textposition</span><span class="o">=</span><span class="s1">&#39;outside&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">figure</span><span class="o">=</span><span class="n">fig_increase</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;flex&#39;</span><span class="p">:</span> <span class="s1">&#39;1 1 48%&#39;</span><span class="p">,</span> <span class="s1">&#39;margin&#39;</span><span class="p">:</span> <span class="s1">&#39;10px&#39;</span><span class="p">}),</span>
+        <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">figure</span><span class="o">=</span><span class="n">fig_decrease</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;flex&#39;</span><span class="p">:</span> <span class="s1">&#39;1 1 48%&#39;</span><span class="p">,</span> <span class="s1">&#39;margin&#39;</span><span class="p">:</span> <span class="s1">&#39;10px&#39;</span><span class="p">})</span>
+    <span class="p">]</span></div>
+
+<div class="viewcode-block" id="update_wage_dashboard"><a class="viewcode-back" href="../modules.html#employment_and_wage_change.update_wage_dashboard">[docs]</a><span class="nd">@employment_and_wage_change</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span>
+    <span class="n">Output</span><span class="p">(</span><span class="s1">&#39;top5-jobs-container-wage&#39;</span><span class="p">,</span> <span class="s1">&#39;children&#39;</span><span class="p">),</span>
+    <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s1">&#39;department-dropdown-wage&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)]</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">update_wage_dashboard</span><span class="p">(</span><span class="n">selected_department</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the wage change dashboard for the selected department.</span>
+
+<span class="sd">    This function filters the data based on the selected department </span>
+<span class="sd">    and calculates the top 5 job titles with the highest and lowest </span>
+<span class="sd">    wage percentage changes.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        selected_department (str): The department name selected from the dropdown.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: A list of two `dcc.Graph` components displaying the top 5 jobs</span>
+<span class="sd">        with the highest and lowest wage changes as bar charts.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filtered_df</span> <span class="o">=</span> <span class="n">common_df</span><span class="p">[</span><span class="n">common_df</span><span class="p">[</span><span class="s1">&#39;department_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">selected_department</span><span class="p">]</span>
+
+    <span class="n">filtered_df_unique</span> <span class="o">=</span> <span class="n">filtered_df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s1">&#39;occ_title&#39;</span><span class="p">)</span>
+
+    <span class="n">top5_increase</span> <span class="o">=</span> <span class="n">filtered_df_unique</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;wage_percent_change&#39;</span><span class="p">)</span>
+    <span class="n">top5_decrease</span> <span class="o">=</span> <span class="n">filtered_df_unique</span><span class="o">.</span><span class="n">nsmallest</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;wage_percent_change&#39;</span><span class="p">)</span>
+
+    <span class="n">fig_increase</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+        <span class="n">top5_increase</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="s1">&#39;occ_title&#39;</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;wage_percent_change&#39;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Top 5 Jobs with Highest Wage Increase&#39;</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;wage_percent_change&#39;</span><span class="p">:</span> <span class="s1">&#39;% Wage Increase&#39;</span><span class="p">},</span>
+        <span class="n">color_discrete_sequence</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;green&#39;</span><span class="p">],</span>
+        <span class="n">text</span><span class="o">=</span><span class="s1">&#39;wage_percent_change&#39;</span>  <span class="c1"># Adding text to the bars to show the actual value</span>
+    <span class="p">)</span>
+    <span class="n">fig_increase</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">xaxis_tickangle</span><span class="o">=-</span><span class="mi">45</span><span class="p">,</span>
+                                <span class="n">margin</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">150</span><span class="p">})</span>
+    <span class="n">fig_increase</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">texttemplate</span><span class="o">=</span><span class="s1">&#39;%</span><span class="si">{text:.2f}</span><span class="s1">%&#39;</span><span class="p">,</span> <span class="n">textposition</span><span class="o">=</span><span class="s1">&#39;outside&#39;</span><span class="p">)</span>
+
+    <span class="n">fig_decrease</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+        <span class="n">top5_decrease</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="s1">&#39;occ_title&#39;</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;wage_percent_change&#39;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Top 5 Jobs with Highest Wage Decrease&#39;</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;wage_percent_change&#39;</span><span class="p">:</span> <span class="s1">&#39;% Wage Decrease&#39;</span><span class="p">},</span>
+        <span class="n">color_discrete_sequence</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">],</span>
+        <span class="n">text</span><span class="o">=</span><span class="s1">&#39;wage_percent_change&#39;</span>  <span class="c1"># Adding text to the bars to show the actual value</span>
+    <span class="p">)</span>
+    <span class="n">fig_decrease</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">xaxis_tickangle</span><span class="o">=-</span><span class="mi">45</span><span class="p">,</span>
+                                <span class="n">margin</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">150</span><span class="p">})</span>
+    <span class="n">fig_decrease</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">texttemplate</span><span class="o">=</span><span class="s1">&#39;%</span><span class="si">{text:.2f}</span><span class="s1">%&#39;</span><span class="p">,</span> <span class="n">textposition</span><span class="o">=</span><span class="s1">&#39;outside&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">figure</span><span class="o">=</span><span class="n">fig_increase</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;flex&#39;</span><span class="p">:</span> <span class="s1">&#39;1 1 50%&#39;</span><span class="p">,</span> <span class="s1">&#39;margin&#39;</span><span class="p">:</span> <span class="s1">&#39;10px&#39;</span><span class="p">}),</span>
+        <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">figure</span><span class="o">=</span><span class="n">fig_decrease</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;flex&#39;</span><span class="p">:</span> <span class="s1">&#39;1 1 50%&#39;</span><span class="p">,</span> <span class="s1">&#39;margin&#39;</span><span class="p">:</span> <span class="s1">&#39;10px&#39;</span><span class="p">})</span>
+    <span class="p">]</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">employment_and_wage_change</span><span class="o">.</span><span class="n">run_server</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8059</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Skill-Based Career Prediction and Market Insights Using Machine Learning and Hollands Code</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">data_preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html#module-employees_across_sectors">employees_across_sectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html#module-employment_and_wage_change">employment_and_wage_change</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html#module-holland_code_model">holland_code_model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html#module-visualisation">visualisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html#module-work_trends_2029">work_trends_2029</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook.html">Holland career compass</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Aditya Birla, Keshav Elango, Raman Srinivas Naik (Co-Author).
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
